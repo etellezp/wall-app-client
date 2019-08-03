@@ -11,7 +11,18 @@ class Login extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault()
-    console.log(this.state)
+    let data = {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(this.state)
+    }
+
+    fetch("http://localhost:3001/api/v1/login", data)
+      .then(response => response.json())
+      .then(response => console.log(response))
   }
 
   handleChange = (event) => {
