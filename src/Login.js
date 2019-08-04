@@ -13,8 +13,8 @@ class Login extends React.Component {
     event.preventDefault()
     let data = {
       method: 'POST',
+      credentials: "include",
       headers: {
-        'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(this.state)
@@ -28,6 +28,7 @@ class Login extends React.Component {
   handleChange = (event) => {
     const {name, value} = event.target
     this.setState({
+      ...this.state,
       [name]: value
     })
   }
