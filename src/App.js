@@ -18,6 +18,10 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    this.fetchCurrentUser()
+  }
+
+  fetchCurrentUser = () => {
     let data = {
       method: 'GET',
       credentials: "include",
@@ -33,6 +37,7 @@ class App extends React.Component {
           alert(response.error)
         } else {
           this.setState({
+            ...this.state.currentUser,
             currentUser: response
           })
         }
@@ -74,15 +79,14 @@ class App extends React.Component {
           alert(response.error)
         } else {
           this.setState({
-            ...this.state.currentUser,
             currentUser: response.user,
-            ...this.state.loginForm,
             loginForm: {
               email: "",
               password: ""
             }
           })
           this.props.history.push("/")
+          this.fetchCurrentUser()
         }
       })
       .catch(console.log)
