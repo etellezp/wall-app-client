@@ -1,5 +1,6 @@
 import React from 'react'
 import Message from './Message'
+import { Link } from 'react-router-dom'
 
 class Wall extends React.Component {
   constructor(props) {
@@ -12,6 +13,7 @@ class Wall extends React.Component {
   componentDidMount() {
     let data = {
       method: 'GET',
+      credentials: "include",
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -30,6 +32,7 @@ class Wall extends React.Component {
     return (
       <div>
         <h1>Welcome to the Wall APP</h1>
+        {this.props.user === null ? <Link to="/login">Login</Link> : <Link to="/message/new">Add a Message</Link>}
         {message}
       </div>
     )

@@ -2,6 +2,7 @@ import React from 'react'
 import Wall from './Wall'
 import Login from './Login'
 import Logout from './Logout'
+import MessageForm from './MessageForm'
 import './App.css'
 import { Switch, Route, NavLink, withRouter } from 'react-router-dom'
 
@@ -125,7 +126,14 @@ class App extends React.Component {
           {this.state.currentUser ? this.state.currentUser.data.attributes.username : "No one logged in"}
         </div>
         <Switch>
-          <Route exact path='/' component={Wall} />
+          <Route exact path='/'
+            render={(props) => <Wall {...props}
+              user={this.state.currentUser}
+            />}
+          />
+          <Route exact path="/message/new"
+            render={(props) => <MessageForm {...props} />}
+          />
           <Route
             exact path='/login'
             render={(props) => <Login {...props}    handleLoginChange={this.handleLoginChange}  handleLoginSubmit={this.handleLoginSubmit}
