@@ -1,8 +1,9 @@
 import React from 'react'
 import Wall from './Wall'
 import Login from './Login'
+import Logout from './Logout'
 import './App.css'
-import { Switch, Route, NavLink } from 'react-router-dom'
+import { Switch, Route, NavLink, withRouter } from 'react-router-dom'
 
 class App extends React.Component {
   constructor(props) {
@@ -21,7 +22,6 @@ class App extends React.Component {
       method: 'GET',
       credentials: "include",
       headers: {
-        'Accept': 'application/json',
         'Content-Type': 'application/json'
       }
     }
@@ -55,34 +55,59 @@ class App extends React.Component {
 
     const userData = this.state.loginForm
 
+
     let data = {
       method: 'POST',
       credentials: "include",
       headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
         user: userData
       })
     }
 
-    fetch("http://localhost:3001/login", data)
+    fetch("http://localhost:3001/api/v1/login", data)
       .then(response => response.json())
       .then(response => {
         if (response.error){
-          alert("Invalid Login")
+          alert(response.error)
         } else {
           this.setState({
+            ...this.state.currentUser,
             currentUser: response.user,
+            ...this.state.loginForm,
             loginForm: {
               email: "",
               password: ""
             }
           })
+          this.props.history.push("/")
         }
       })
       .catch(console.log)
+  }
+
+  logout = (event) => {
+    event.preventDefault()
+
+    let data = {
+      method: 'DELETE',
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }
+
+    fetch("http://localhost:3001/api/v1/logout", data)
+      .then(response => response.json())
+      .then(response => {
+        this.setState({
+          currentUser: null
+        })
+        this.props.history.push("/")
+      })
+
   }
 
   render() {
@@ -92,7 +117,8 @@ class App extends React.Component {
         <div>
           <NavLink exact to="/">Wall |</NavLink>
           <NavLink exact to="/login">Login |</NavLink>
-          {this.state.currentUser !== null ? this.state.currentUser.data.attributes.username : "No one log in"}
+          <NavLink exact to="/logout">Log Out |</NavLink>
+          {this.state.currentUser ? this.state.currentUser.data.attributes.username : "No one logged in"}
         </div>
         <Switch>
           <Route exact path='/' component={Wall} />
@@ -103,10 +129,16 @@ class App extends React.Component {
             password={this.state.loginForm.password}
             />}
           />
+          <Route
+            exact path="/logout"
+            render={(props) => <Logout {...props}
+            logout={this.logout}
+            />}
+          />
         </Switch>
       </div>
     )
   }
 }
 
-export default App;
+export default withRouter(App);
