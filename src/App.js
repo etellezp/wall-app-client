@@ -4,6 +4,7 @@ import Login from './Login'
 import Logout from './Logout'
 import MessageForm from './MessageForm'
 import RegistrationForm from './RegistrationForm'
+import UserCard from './UserCard'
 import './App.css'
 import { Switch, Route, NavLink, withRouter } from 'react-router-dom'
 
@@ -222,11 +223,16 @@ class App extends React.Component {
           <NavLink exact to="/login">Login |</NavLink>
           <NavLink exact to="/logout">Log Out |</NavLink>
           <NavLink exact to="/register">Sign In |</NavLink>
-          {this.state.currentUser ? this.state.currentUser.data.attributes.username : "No one logged in"}
+          {!!this.state.currentUser ? <NavLink exact to={`/users/${this.state.currentUser.data.attributes.username}`}>Profile</NavLink> : ""}
         </div>
         <Switch>
           <Route exact path='/'
             render={(props) => <Wall {...props}
+              user={this.state.currentUser}
+            />}
+          />
+          <Route exact path="/users/:username"
+            render={(props) => <UserCard {...props}
               user={this.state.currentUser}
             />}
           />
