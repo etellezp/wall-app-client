@@ -3,6 +3,7 @@ import Wall from './Wall'
 import Login from './Login'
 import Logout from './Logout'
 import MessageForm from './MessageForm'
+import RegistrationForm from './RegistrationForm'
 import './App.css'
 import { Switch, Route, NavLink, withRouter } from 'react-router-dom'
 
@@ -17,6 +18,11 @@ class App extends React.Component {
       },
       messageForm: {
         content: ""
+      },
+      registrationForm: {
+        username: "",
+        email: "",
+        password: ""
       }
     }
   }
@@ -95,6 +101,53 @@ class App extends React.Component {
       .catch(console.log)
   }
 
+  handleRegistrationChange = (event) => {
+    const {name, value} = event.target
+    this.setState({
+      registrationForm: {
+        ...this.state.registrationForm,
+        [name]: value
+      }
+    })
+  }
+
+  handleRegistrationSubmit = (event) => {
+    event.preventDefault()
+
+    const registrationData = this.state.registrationForm
+
+    let data = {
+      method: 'POST',
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        user: registrationData
+      })
+    }
+
+    fetch("http://localhost:3001/api/v1/signup", data)
+      .then(response => response.json())
+      .then(response => {
+        if (response.error){
+          alert(response.error)
+        } else {
+          this.setState({
+            currentUser: response.user,
+            registrationForm: {
+              username: "",
+              email: "",
+              password: ""
+            }
+          })
+          this.props.history.push("/")
+          this.fetchCurrentUser()
+        }
+      })
+      .catch(console.log)
+  }
+
   logout = (event) => {
     event.preventDefault()
 
@@ -157,6 +210,7 @@ class App extends React.Component {
           this.props.history.push("/")
         }
       })
+      .catch(console.log)
   }
 
   render() {
@@ -167,6 +221,7 @@ class App extends React.Component {
           <NavLink exact to="/">Wall |</NavLink>
           <NavLink exact to="/login">Login |</NavLink>
           <NavLink exact to="/logout">Log Out |</NavLink>
+          <NavLink exact to="/register">Sign In |</NavLink>
           {this.state.currentUser ? this.state.currentUser.data.attributes.username : "No one logged in"}
         </div>
         <Switch>
@@ -187,6 +242,16 @@ class App extends React.Component {
             render={(props) => <Login {...props}    handleLoginChange={this.handleLoginChange}  handleLoginSubmit={this.handleLoginSubmit}
             email={this.state.loginForm.email}
             password={this.state.loginForm.password}
+            />}
+          />
+          <Route
+            exact path="/register"
+            render={(props) => <RegistrationForm {...props}
+            handleRegistrationChange={this.handleRegistrationChange}
+            handleRegistrationSubmit={this.handleRegistrationSubmit}
+            username={this.state.registrationForm.username}
+            email={this.state.registrationForm.email}
+            password={this.state.registrationForm.password}
             />}
           />
           <Route
