@@ -232,9 +232,9 @@ class App extends React.Component {
             />}
           />
           <Route exact path="/users/:username"
-            render={(props) => <UserCard {...props}
+            render={(props) => !!this.state.currentUser ? <UserCard {...props}
               user={this.state.currentUser}
-            />}
+            /> : "Please log in"}
           />
           <Route exact path="/message/new"
             render={(props) => <MessageForm {...props}
