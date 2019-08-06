@@ -1,16 +1,17 @@
 import React from 'react'
 
-const MessageForm = () => {
+const MessageForm = ({ content, handleMessageChange, handleMessageSubmit }) => {
 
   return (
     <div>
-      <form>
+      <form onSubmit={handleMessageSubmit}>
         <input
           name="content"
           placeholder="Message Goes Here..."
           type="text"
+          value={content}
+          onChange={handleMessageChange}
         />
-
         <button type="submit">Add Message</button>
       </form>
     </div>

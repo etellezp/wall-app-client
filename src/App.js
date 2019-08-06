@@ -14,6 +14,9 @@ class App extends React.Component {
       loginForm: {
         email: "",
         password: ""
+      },
+      messageForm: {
+        content: ""
       }
     }
   }
@@ -115,6 +118,38 @@ class App extends React.Component {
 
   }
 
+  handleMessageChange = (event) => {
+    const {name, value} = event.target
+    this.setState({
+      messageForm: {
+        ...this.state.messageForm,
+        [name]: value
+      }
+    })
+  }
+
+  handleMessageSubmit = (event) => {
+    event.preventDefault()
+
+    const messageData = this.state.messageForm
+
+
+    let data = {
+      method: 'POST',
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: messageData
+      })
+    }
+
+    fetch("http://localhost:3001/api/v1/messages", data)
+      .then(response => response.json())
+      .then(response => console.log(response))
+  }
+
   render() {
 
     return (
@@ -132,7 +167,11 @@ class App extends React.Component {
             />}
           />
           <Route exact path="/message/new"
-            render={(props) => <MessageForm {...props} />}
+            render={(props) => <MessageForm {...props}
+            handleMessageChange={this.handleMessageChange}
+            handleMessageSubmit={this.handleMessageSubmit}
+            content={this.state.messageForm.content}
+            />}
           />
           <Route
             exact path='/login'
