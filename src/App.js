@@ -64,7 +64,6 @@ class App extends React.Component {
 
     const userData = this.state.loginForm
 
-
     let data = {
       method: 'POST',
       credentials: "include",
@@ -133,7 +132,6 @@ class App extends React.Component {
 
     const messageData = this.state.messageForm
 
-
     let data = {
       method: 'POST',
       credentials: "include",
@@ -147,7 +145,18 @@ class App extends React.Component {
 
     fetch("http://localhost:3001/api/v1/messages", data)
       .then(response => response.json())
-      .then(response => console.log(response))
+      .then(response => {
+        if (response.error) {
+          alert(response.error)
+        } else {
+          this.setState({
+            messageForm: {
+              content: ""
+            }
+          })
+          this.props.history.push("/")
+        }
+      })
   }
 
   render() {
