@@ -45,7 +45,7 @@ class App extends React.Component {
       .then(response => response.json())
       .then(response => {
         if (response.error) {
-          alert(response.error)
+          console.log(response.error)
         } else {
           this.setState({
             ...this.state.currentUser,
@@ -142,6 +142,7 @@ class App extends React.Component {
               password: ""
             }
           })
+          alert("Thank you for signin up! Please check your email and confirm your email address")
           this.props.history.push("/")
           this.fetchCurrentUser()
         }
@@ -218,13 +219,15 @@ class App extends React.Component {
 
     return (
       <div className="App">
-        <div>
-          <NavLink exact to="/">Wall |</NavLink>
-          <NavLink exact to="/login">Login |</NavLink>
-          <NavLink exact to="/logout">Log Out |</NavLink>
-          <NavLink exact to="/register">Sign In |</NavLink>
-          {!!this.state.currentUser ? <NavLink exact to={`/users/${this.state.currentUser.data.attributes.username}`}>Profile</NavLink> : ""}
-        </div>
+        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+          <NavLink className="navbar-brand"exact to="/">Wall App</NavLink>
+          <div className="navbar-nav ml-auto">
+            <NavLink className="nav-item nav-link" exact to="/login">Login</NavLink>
+            <NavLink className="nav-item nav-link" exact to="/logout">Log Out</NavLink>
+            <NavLink className="nav-item nav-link" exact to="/register">Sign In</NavLink>
+            {!!this.state.currentUser ? <NavLink className="nav-item nav-link" exact to={`/users/${this.state.currentUser.data.attributes.username}`}>Profile</NavLink> : ""}
+          </div>
+        </nav>
         <Switch>
           <Route exact path='/'
             render={(props) => <Wall {...props}
@@ -237,11 +240,11 @@ class App extends React.Component {
             /> : "Please log in"}
           />
           <Route exact path="/message/new"
-            render={(props) => <MessageForm {...props}
+            render={(props) => this.state.currentUser.data.attributes.email_confirmed ? <MessageForm {...props}
             handleMessageChange={this.handleMessageChange}
             handleMessageSubmit={this.handleMessageSubmit}
             content={this.state.messageForm.content}
-            />}
+            /> : alert("You need to confirm your email in order to add a message")}
           />
           <Route
             exact path='/login'
