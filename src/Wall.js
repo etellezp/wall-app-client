@@ -29,7 +29,12 @@ class Wall extends React.Component {
   }
 
   render() {
-    let message = this.state.messages.map(message => <Message key={message.id} message={message.attributes.content}/>)
+    let message
+    if (this.state.messages.length > 0) {
+      message = this.state.messages.map(message => <Message key={message.id} message={message.attributes.content}/>)
+    } else {
+      message = <h3 className="text-white text-center">There are no messages, be the first one to add one!</h3>
+    }
     return (
       <div className="Wall my-5">
         <div className="container text-center">
