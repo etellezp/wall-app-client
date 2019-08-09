@@ -40,7 +40,19 @@ class Wall extends React.Component {
           </div>
           <div className="row mt-4">
             <div className="col-12">
-              {this.props.user === null ? <Link className="btn btn-outline-light btn-lg" to="/login">Login to add a Message</Link> : <Link className="btn btn-outline-light btn-lg" to="/message/new">Add a Message</Link>}
+              {this.props.user === null ?
+                <Link
+                  className="btn btn-outline-light btn-lg"
+                  to="/login">
+                  Login to add a Message
+                </Link>
+                  :
+                <Link
+                  className="btn btn-outline-light btn-lg"
+                  to="/message/new">
+                  Add a Message
+                </Link>
+              }
             </div>
           </div>
         </div>
