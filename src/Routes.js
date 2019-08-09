@@ -31,7 +31,7 @@ const Routes = ({
         <Route exact path="/users/:username"
           render={(props) => !!currentUser ? <UserCard {...props}
             user={currentUser}
-          /> : "Please log in"}
+          /> : <h1 className="text-white mx-auto text-center">Please Log In to view your profile</h1>}
         />
         <Route exact path="/message/new"
           render={(props) => currentUser.data.attributes.email_confirmed ? <MessageForm {...props}
