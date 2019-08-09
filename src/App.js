@@ -1,12 +1,7 @@
 import React from 'react'
-import Wall from './Wall'
-import Login from './Login'
-import Logout from './Logout'
-import MessageForm from './MessageForm'
-import RegistrationForm from './RegistrationForm'
-import UserCard from './UserCard'
+import Routes from './Routes'
 import './App.css'
-import { Switch, Route, NavLink, withRouter } from 'react-router-dom'
+import { NavLink, withRouter } from 'react-router-dom'
 
 class App extends React.Component {
   constructor(props) {
@@ -210,6 +205,7 @@ class App extends React.Component {
             }
           })
           this.props.history.push("/")
+          this.fetchCurrentUser()
         }
       })
       .catch(console.log)
@@ -253,48 +249,20 @@ class App extends React.Component {
               </div>
             }
         </nav>
-        <Switch>
-          <Route exact path='/'
-            render={(props) => <Wall {...props}
-              user={this.state.currentUser}
-            />}
-          />
-          <Route exact path="/users/:username"
-            render={(props) => !!this.state.currentUser ? <UserCard {...props}
-              user={this.state.currentUser}
-            /> : "Please log in"}
-          />
-          <Route exact path="/message/new"
-            render={(props) => this.state.currentUser.data.attributes.email_confirmed ? <MessageForm {...props}
-            handleMessageChange={this.handleMessageChange}
-            handleMessageSubmit={this.handleMessageSubmit}
-            content={this.state.messageForm.content}
-            /> : alert("You need to confirm your email in order to add a message")}
-          />
-          <Route
-            exact path='/login'
-            render={(props) => <Login {...props}    handleLoginChange={this.handleLoginChange}  handleLoginSubmit={this.handleLoginSubmit}
-            email={this.state.loginForm.email}
-            password={this.state.loginForm.password}
-            />}
-          />
-          <Route
-            exact path="/register"
-            render={(props) => <RegistrationForm {...props}
-            handleRegistrationChange={this.handleRegistrationChange}
-            handleRegistrationSubmit={this.handleRegistrationSubmit}
-            username={this.state.registrationForm.username}
-            email={this.state.registrationForm.email}
-            password={this.state.registrationForm.password}
-            />}
-          />
-          <Route
-            exact path="/logout"
-            render={(props) => <Logout {...props}
-            logout={this.logout}
-            />}
-          />
-        </Switch>
+
+        <Routes 
+          currentUser={this.state.currentUser}
+          handleMessageChange={this.handleMessageChange}
+          handleMessageSubmit={this.handleMessageSubmit}
+          messageForm={this.state.messageForm}
+          handleLoginChange={this.handleLoginChange}
+          handleLoginSubmit={this.handleLoginSubmit}
+          loginForm={this.state.loginForm}
+          handleRegistrationChange={this.handleRegistrationChange}
+          handleRegistrationSubmit={this.handleRegistrationSubmit}
+          registrationForm={this.state.registrationForm}
+          logout={this.logout}
+        />
       </div>
     )
   }
