@@ -1,7 +1,8 @@
 import React from 'react'
 import Routes from './Routes'
+import NavBar from './NavBar'
 import './App.css'
-import { NavLink, withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 
 class App extends React.Component {
   constructor(props) {
@@ -215,42 +216,9 @@ class App extends React.Component {
 
     return (
       <div className="App">
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-          <NavLink
-            className="navbar-brand"
-            exact to="/">
-            Wall App
-          </NavLink>
-            {!!this.state.currentUser ?
-              <div className="navbar-nav ml-auto">
-                <NavLink
-                  className="nav-item nav-link"
-                  exact to={`/users/${this.state.currentUser.data.attributes.username}`}>
-                  Profile
-                  </NavLink>
-                <NavLink
-                  className="nav-item nav-link"
-                  exact to="/logout">
-                  Log Out
-                </NavLink>
-              </div>
-                :
-              <div className="navbar-nav ml-auto">
-                <NavLink
-                  className="nav-item nav-link"
-                  exact to="/login">
-                  Login
-                </NavLink>
-                <NavLink
-                  className="nav-item nav-link"
-                  exact to="/register">
-                  Sign In
-                </NavLink>
-              </div>
-            }
-        </nav>
+        <NavBar currentUser={this.state.currentUser} />
 
-        <Routes 
+        <Routes
           currentUser={this.state.currentUser}
           handleMessageChange={this.handleMessageChange}
           handleMessageSubmit={this.handleMessageSubmit}
